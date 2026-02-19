@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Professional Result Calculator</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 420px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 95%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Student Result Calculator</h2>
+
+    <input type="text" id="name" placeholder="Enter Your Name">
+    <input type="number" id="subjects" placeholder="Number of Subjects">
+
+    <div id="marksSection"></div>
+
+    <button onclick="generateFields()">Generate Fields</button>
+    <button onclick="calculateResult()">Calculate Result</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function generateFields() {
+    var subjects = document.getElementById("subjects").value;
+    var marksSection = document.getElementById("marksSection");
+    marksSection.innerHTML = "";
+
+    for (var i = 1; i <= subjects; i++) {
+        marksSection.innerHTML += 
+        "<input type='number' id='obtained"+i+"' placeholder='Obtained marks for Subject "+i+"'>" +
+        "<input type='number' id='max"+i+"' placeholder='Maximum marks for Subject "+i+"'>";
+    }
+}
+
+function calculateResult() {
+    var name = document.getElementById("name").value;
+    var subjects = document.getElementById("subjects").value;
+
+    var totalObtained = 0;
+    var totalMax = 0;
+
+    for (var i = 1; i <= subjects; i++) {
+        var obtained = parseFloat(document.getElementById("obtained"+i).value);
+        var max = parseFloat(document.getElementById("max"+i).value);
+
+        if(isNaN(obtained) || isNaN(max)) {
+            alert("Please fill all fields correctly!");
+            return;
+        }
+
+        totalObtained += obtained;
+        totalMax += max;
+    }
+
+    var percentage = (totalObtained / totalMax) * 100;
+    percentage = percentage.toFixed(2);
+
+    document.getElementById("result").innerHTML =
+        "Name: " + name +
+        "<br>Total Obtained: " + totalObtained +
+        "<br>Total Maximum: " + totalMax +
+        "<br>Percentage: " + percentage + "%";
+}
+</script>
+
+</body>
+</html>
