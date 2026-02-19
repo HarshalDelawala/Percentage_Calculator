@@ -1,24 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Professional Result Calculator</title>
+    <title>Student Result Calculator | Harshal Delawala</title>
+
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: Arial;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(-45deg, #667eea, #764ba2, #6a11cb, #2575fc);
+            background-size: 400% 400%;
+            animation: gradientMove 10s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
             width: 420px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: fadeIn 1s ease;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h2 {
@@ -27,11 +49,12 @@
         }
 
         input {
-            width: 95%;
-            padding: 8px;
-            margin: 5px 0;
-            border-radius: 6px;
-            border: 1px solid #ccc;
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0;
+            border-radius: 8px;
+            border: none;
+            outline: none;
         }
 
         button {
@@ -39,22 +62,60 @@
             padding: 10px;
             margin-top: 10px;
             border: none;
-            border-radius: 6px;
-            background: #667eea;
-            color: white;
+            border-radius: 8px;
+            background: white;
+            color: #333;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
         }
 
         button:hover {
-            background: #5a67d8;
+            transform: scale(1.05);
+            background: #f1f1f1;
         }
 
         .result {
             margin-top: 15px;
-            font-weight: bold;
             text-align: center;
+            font-weight: bold;
         }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            width: 0%;
+            background: lime;
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 
@@ -72,16 +133,26 @@
     <button onclick="calculateResult()">Calculate Result</button>
 
     <div class="result" id="result"></div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
 </div>
 
+<footer>
+    © 2026 Harshal Delawala |
+    <a href="https://github.com/HarshalDelawala" target="_blank">GitHub</a>
+</footer>
+
 <script>
+
 function generateFields() {
     var subjects = document.getElementById("subjects").value;
-    var marksSection = document.getElementById("marksSection");
-    marksSection.innerHTML = "";
+    var section = document.getElementById("marksSection");
+    section.innerHTML = "";
 
     for (var i = 1; i <= subjects; i++) {
-        marksSection.innerHTML += 
+        section.innerHTML += 
         "<input type='number' id='obtained"+i+"' placeholder='Obtained marks for Subject "+i+"'>" +
         "<input type='number' id='max"+i+"' placeholder='Maximum marks for Subject "+i+"'>";
     }
@@ -110,12 +181,27 @@ function calculateResult() {
     var percentage = (totalObtained / totalMax) * 100;
     percentage = percentage.toFixed(2);
 
+    var grade;
+    if (percentage >= 90) grade = "A+";
+    else if (percentage >= 75) grade = "A";
+    else if (percentage >= 60) grade = "B";
+    else if (percentage >= 40) grade = "C";
+    else grade = "Fail";
+
     document.getElementById("result").innerHTML =
         "Name: " + name +
-        "<br>Total Obtained: " + totalObtained +
-        "<br>Total Maximum: " + totalMax +
-        "<br>Percentage: " + percentage + "%";
+        "<br>Percentage: " + percentage + "%" +
+        "<br>Grade: " + grade;
+
+    var progressBar = document.getElementById("progressBar");
+    progressBar.style.width = percentage + "%";
+
+    if (percentage >= 60)
+        progressBar.style.background = "lime";
+    else
+        progressBar.style.background = "red";
 }
+
 </script>
 
 </body>
